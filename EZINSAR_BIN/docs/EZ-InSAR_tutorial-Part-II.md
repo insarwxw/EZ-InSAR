@@ -147,19 +147,17 @@ conda install -c conda-forge isce2
 
 ### 2.2.3 Install MintPy
 
-MintPy is written purely in Python. So, the use of MintPy just needs the installation of dependent python packages and then setup the environment variables properly. 
-
-**[Note]**: You can change the PATH variables for MintPy in `config_InSARenv.templte`.
+MintPy is written purely in Python. So, the use of MintPy just needs the installation of dependent python packages and then setup the environment variables properly. Please also refer the newest help information of [**MintPy installation**](https://github.com/insarlab/MintPy/blob/main/docs/installation.md).
+**NOTE** You may need to fix the python version to a lower version (e.g., python=3.8) since the incompatiable error when using isce2 for python 3.10. (see [isce2 error for python > 3.10](https://github.com/isce-framework/isce2/issues/458)). 
 
 ```bash
-# A. Install the mintpy requirements 
+# Install the mintpy requirements first and then the source code.
+# 
 cd $tool_DIR
-conda install -c conda-forge --file MintPy/requirements.txt
+conda install -c conda-forge --file ./MintPy/requirements.txt
 
-# B. Install dependencies not available from conda
-sudo ln -s ${CONDA_PREFIX}/bin/cython ${CONDA_PREFIX}/bin/cython3
-$CONDA_PREFIX/bin/pip install scalene      # CPU, GPU and memory profiler
-$CONDA_PREFIX/bin/pip install ipynb        # import functions from ipynb files
+#Close and restart the shell for changes to take effect
+python -m pip install -e ./MintPy
 ```
 
 ### 2.2.4 Install StaMPS
@@ -204,7 +202,7 @@ sudo apt install triangle-bin
 - Install the dependencies of some python script required by EZ-InSAR to your InSARenv.
 
 ```bash
-conda install fiona geopandas rasterio 
+conda install fiona geopandas rasterio
 ```
 
 - EZ-InSAR uses "[aws](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)" to download the NASADEM or Copernicus DEM. Using the following commands to install it. 

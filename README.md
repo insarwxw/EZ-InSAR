@@ -41,7 +41,7 @@ Some additional dependencies are needed to run the above InSAR processors or enh
 
 ## 1.2 Running the toolbox 
 
-After the installation and configuration, lunch "Matlab" through a terminal, and then type "EZ_InSAR". 
+After the installation and configuration, open a terminal, load the EZ-InSAR environment through "load_insar", launch "Matlab", and then type "EZ_InSAR". 
 
 ![EZ-InSAR Interface](./EZINSAR_BIN/docs/EZINSAR_interface.jpg)
 

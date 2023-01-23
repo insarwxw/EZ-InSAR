@@ -801,6 +801,11 @@ print('\nWARNING: The results are qualitative and can vary due to the accuracy o
 # Plotting
 ###########################################################################
 plt.scatter(para_sat['dates'], np.array(Bperp), c="black", label="SAR Acquisitions")
+for idx in range(len(para_sat['dates'])):
+    if not idx ==  idx_ref:
+        plt.plot(np.hstack((para_sat['dates'][idx_ref],para_sat['dates'][idx])), 
+            np.hstack((Bperp[idx_ref],Bperp[idx])), 'k--', linewidth=1)
+plt.plot(np.hstack((para_sat['dates'][idx_ref],para_sat['dates'][idx_ref])),np.hstack((Bperp[idx_ref],Bperp[idx_ref])), 'k--', linewidth=1,label="Selected Coregistration Network")
 plt.scatter(para_sat['dates'][idx_best_ref], Bperp[idx_best_ref], c="red", label="Best Potential Reference Date")
 plt.scatter(para_sat['dates'][idx_ref], Bperp[idx_ref], marker='1', c="blue", label="Selected Reference Date")
 plt.xlabel("Time")

@@ -1,11 +1,10 @@
-<img src="https://github.com/alexisInSAR/EZ-InSAR/blob/Version_2_0_0_Beta/EZINSAR_BIN/private/EZ_InSAR_logo.gif" alt="Logo EZ-InSAR" width="250"> 
+<img src="./EZINSAR_BIN/private/EZ_InSAR_logo.gif" alt="Logo EZ-InSAR" width="250"> 
 
 # EZ-InSAR 
 
 **EZ-InSAR (formerly called MIESAR for Matlab Interface for Easy InSAR)** is a toolbox written in MATLAB to conduct Interferometric Synthetic Aperture Radar (InSAR) data processing using the open-source software packages (ISCE+StaMPS/MintPy) within a easy-to-use Graphic-User-Interface (GUI). The toolbox now can generate SAR interferograms using ISCE and conduct displacement time series analysis with either Persistent Scatters (**PS**) or Small-Baselines (**SBAS**) approaches using StaMPS or MintPy. 
 
 **EZ-InSAR** minimizes the work of user in downloading, parametrizing, and processing the SAR data, so enabling these who are not familiar with InSAR but can also produce and analyze ground surface displacements by themselves. **EZ-InSAR** is also a contribution to the Platform for Atlantic Geohazard Risk Management (AGEO) project, which is funded by Interreg Atlantic Area Programme through the *European* Regional Development Fund.
-
 
 **Release info**: Version 2.0.0 Beta, August 19, 2022
 
@@ -75,9 +74,9 @@ We acknowledge that the open-source InSAR processing software and code used by E
 
 ## 1.5 Partners
 
-|<img src="https://github.com/alexisInSAR/EZ-InSAR/blob/Version_2_0_0_Beta/EZINSAR_BIN/private/AGEO-transparent.png" alt="AGEO" width="150pix">|[**AGEO**](https://ageoatlantic.eu/)|
+|<img src="./EZINSAR_BIN/private/AGEO-transparent.png" alt="AGEO" width="150pix">|[**AGEO**](https://ageoatlantic.eu/)|
 |---|---|
-|<img src="https://github.com/alexisInSAR/EZ-InSAR/blob/Version_2_0_0_Beta/EZINSAR_BIN/private/atlanticarealogo.png" alt="Interreg Atlantic Area" width="150pix">|[**Interreg Atlantic Area**](https://www.atlanticarea.eu/)|
-|<img src="https://github.com/alexisInSAR/EZ-InSAR/blob/Version_2_0_0_Beta/EZINSAR_BIN/private/icrag-logo.png" alt="iCRAG" height="50pix">|[**iCRAG**](https://www.icrag-centre.org/)|
-|<img src="https://github.com/alexisInSAR/EZ-InSAR/blob/Version_2_0_0_Beta/EZINSAR_BIN/private/UCDlogo.png" alt="UCD" height="100pix"> |[**University College Dublin**](https://www.ucd.ie/)|
-|<img src="https://github.com/alexisInSAR/EZ-InSAR/blob/Version_2_0_0_Beta/EZINSAR_BIN/private/SWJTULogo.png" alt="SWJTU" height="100pix"> |[**Southwest Jiaotong University**](https://en.swjtu.edu.cn/)|
+|<img src="./EZINSAR_BIN/private/atlanticarealogo.png" alt="Interreg Atlantic Area" width="150pix">|[**Interreg Atlantic Area**](https://www.atlanticarea.eu/)|
+|<img src="./EZINSAR_BIN/private/icrag-logo.png" alt="iCRAG" height="50pix">|[**iCRAG**](https://www.icrag-centre.org/)|
+|<img src="./EZINSAR_BIN/private/UCDlogo.png" alt="UCD" height="100pix"> |[**University College Dublin**](https://www.ucd.ie/)|
+|<img src="./EZINSAR_BIN/private/SWJTULogo.png" alt="SWJTU" height="100pix"> |[**Southwest Jiaotong University**](https://en.swjtu.edu.cn/)|

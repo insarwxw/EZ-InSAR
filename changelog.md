@@ -2,7 +2,7 @@
 
 **Version 2.2.4 Beta** (August, 2024):
 
-* Fix for the egm96-15 file (only for the NASADEM)
+* Fix for the egm96-15 file (only for the NASADEM). The previous link has been deactived. The Copernicus DEM can be used to avoid any problems. 
 
 **Version 2.2.3 Beta** (April, 2024):
 

@@ -32,6 +32,7 @@
 #############################################################################################
 ## Changelog
 # - Fix the NASADEM geoid conversion (Alexis Hrysiewice, UCD / iCRAG, Jan. 2024)
+# - Fix the NASADEM geoid conversion (link of the .gtx file) (Alexis Hrysiewice, UCD / iCRAG, Aug. 2024)
 #############################################################################################
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "`basename $0`: Script to download the 30-m NASADEM or Copernicus DEM and prepare"
@@ -263,11 +264,11 @@ if [ $proc_flag == 0 ];then
   echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
   echo "Downloading the EGM96 geoid model to correct for the NASADEM datum to WGS84."
   echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-  wget -nc https://s3-eu-west-1.amazonaws.com/download.agisoft.com/geoids/egm96-15.tif
+  wget -nc https://github.com/OSGeo/proj-datumgrid/raw/master/egm96_15.gtx
   
   mv dem_merged.tif dem_merged.tmp0.tif
   gdal_calc.py -A dem_merged.tmp0.tif --outfile=dem_merged.tmp1.tif --calc="numpy.where(A==0,nan,A)"
-  gdalwarp -s_srs "+proj=longlat +datum=WGS84 +no_defs +geoidgrids=./egm96-15.tif" -t_srs "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" dem_merged.tmp1.tif dem_merged.tmp2.tif
+  gdalwarp -s_srs "+proj=longlat +datum=WGS84 +no_defs +geoidgrids=./egm96-15.gtx" -t_srs "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" dem_merged.tmp1.tif dem_merged.tmp2.tif
   gdal_calc.py -A dem_merged.tmp2.tif --outfile=dem_merged.tif --calc="numpy.nan_to_num(A,nan=0)"
   rm dem_merged.tmp*.tif
 

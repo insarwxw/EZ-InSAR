@@ -10,7 +10,7 @@ function [burst_coordinates, nb_burst] = readxmlannotationS1(pathxml,mode)
 %
 %   -------------------------------------------------------
 %   Alexis Hrysiewicz, UCD / iCRAG
-%   Version: 1.0.0 Beta
+%   Version: 2.0.0 Beta
 %   Date: 29/11/2021
 %
 %   -------------------------------------------------------

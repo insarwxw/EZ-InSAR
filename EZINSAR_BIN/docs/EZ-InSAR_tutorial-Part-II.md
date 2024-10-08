@@ -147,10 +147,17 @@ conda install -c conda-forge isce2
 
 ### 2.2.3 Install MintPy
 
-MintPy is available on the [conda-forge](https://anaconda.org/conda-forge/mintpy) channel. The latest released version can be installed via `conda` as:
+MintPy is written purely in Python. So, the use of MintPy just needs the installation of dependent python packages and then setup the environment variables properly. Please also refer the newest help information of [**MintPy installation**](https://github.com/insarlab/MintPy/blob/main/docs/installation.md).
+**NOTE** You may need to fix the python version to a lower version (e.g., python=3.8) since the incompatiable error when using isce2 for python 3.10. (see [isce2 error for python > 3.10](https://github.com/isce-framework/isce2/issues/458)). 
 
 ```bash
-conda install -c conda-forge mintpy
+# Install the mintpy requirements first and then the source code.
+# 
+cd $tool_DIR
+conda install -c conda-forge --file ./MintPy/requirements.txt
+
+#Close and restart the shell for changes to take effect
+python -m pip install -e ./MintPy
 ```
 
 ### 2.2.4 Install StaMPS
@@ -162,19 +169,13 @@ conda install -c conda-forge mintpy
 ```bash
 ### check which version of gcc
 gcc -v  
-#$ gcc version 11.3.0 (Ubuntu 11.3.0-17ubuntu1~22.04)
-##########################################################################
-sudo vim /etc/apt/sources.list
-#ADD the following line into the file 'sources.list'
-deb [arch=amd64] http://archive.ubuntu.com/ubuntu focal main universe
-##########################################################################
+#$ gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
 
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 40
-
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 40
-
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt install -y gcc-7 g++-7
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
 sudo update-alternatives --config gcc
 sudo update-alternatives --config g++ 
 ```
@@ -201,14 +202,14 @@ sudo apt install triangle-bin
 - Install the dependencies of some python script required by EZ-InSAR to your InSARenv.
 
 ```bash
-conda install fiona geopandas rasterio opencv
+conda install fiona geopandas rasterio
 ```
 
 - EZ-InSAR uses "[aws](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)" to download the NASADEM or Copernicus DEM. Using the following commands to install it. 
 
 ```bash
 cd $tool_DIR
-sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 sudo unzip awscliv2.zip
 sudo ./aws/install
 ```

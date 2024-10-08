@@ -11,12 +11,13 @@ function [modepara] = parallelizationstepISCE(namestep,miesar_para)
 %
 %   -------------------------------------------------------
 %   Alexis Hrysiewicz, UCD / iCRAG
-%   Version: 1.0.0 Beta
+%   Version: 2.0.0 Beta
 %   Date: 30/11/2021
 %
 %   -------------------------------------------------------
 %   Version history:
 %           1.0.0 Beta: Initiale (unreleased)
+%           2.0.0 Beta: Initial (unreleased)
 
 %% Define the step name
 

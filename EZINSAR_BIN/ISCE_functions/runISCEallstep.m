@@ -13,7 +13,7 @@ function runISCEallstep(action,modepara,figstep,miesar_para)
 %
 %   -------------------------------------------------------
 %   Alexis Hrysiewicz, UCD / iCRAG
-%   Version: 1.0.0 Beta
+%   Version: 2.0.0 Beta
 %   Date: 30/11/2021
 %
 %   -------------------------------------------------------
@@ -23,7 +23,7 @@ function runISCEallstep(action,modepara,figstep,miesar_para)
 %
 %   -------------------------------------------------------
 %   Version history:
-%           1.0.0 Beta: Initiale (unreleased)
+%           2.0.0 Beta: Initiale (unreleased)
 
 isce_switch_stackfunctions([],[],[],miesar_para)
 

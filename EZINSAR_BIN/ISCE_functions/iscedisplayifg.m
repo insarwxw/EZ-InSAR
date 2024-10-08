@@ -14,7 +14,7 @@ function iscedisplayifg(src,evt,action,miesar_para)
 %
 %   -------------------------------------------------------
 %   Alexis Hrysiewicz, UCD / iCRAG
-%   Version: 1.0.0 Beta
+%   Version: 2.0.0 Beta
 %   Date: 17/02/2020
 %
 %   -------------------------------------------------------

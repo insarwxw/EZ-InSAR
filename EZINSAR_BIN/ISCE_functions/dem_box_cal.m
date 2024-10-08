@@ -9,7 +9,7 @@ function dem_region=dem_box_cal(lonta,lata,box_burst)
 %
 %   -------------------------------------------------------
 %   Xiaowen Wang, UCD
-%   Version: 1.0.0 Beta
+%   Version: 2.0.0 Beta
 %   Date: 23/02/2022
 %
 %   -------------------------------------------------------

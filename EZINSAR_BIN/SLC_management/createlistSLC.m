@@ -14,17 +14,29 @@ function createlistSLC(src,evt,action,miesar_para)
 %
 %   -------------------------------------------------------
 %   Alexis Hrysiewicz, UCD / iCRAG
-%   Version: 2.0.0 Beta
+%   Version: 2.0.3 Beta
 %   Date: 07/07/2022
 %
 %   -------------------------------------------------------
 %   Modified:
 %           - Alexis Hrysiewicz, UCD / iCRAG, 18/07/2022: modifcation of
 %           text information
+%           - Alexis Hrysiewicz, UCD / iCRAG, 15/02/2023: fix regarding the
+%           Sentinel-1 API from ASF service
+%           - Alexis Hrysiewicz, UCD / iCRAG, 18/07/2023: fix regarding the
+%           Sentinel-1 API from ASF service
+%           - Alexis Hrysiewicz, UCD / iCRAG, 28/09/2023: implementation of
+%           the DUAL polarisation for TSX/PAZ data
+%           - Alexis Hrysiewicz, UCD / iCRAG, 22/11/2023: add the delimiter
+%           option for reading the list from ASF server
 %
 %   -------------------------------------------------------
 %   Version history:
 %           2.0.0 Beta: Initial (unreleased)
+%           2.0.1 Beta: Initial (unreleased)
+%           2.0.3 Beta: Initial (unreleased)
+%           2.1.0 Beta: Initial (unreleased)
+%           2.2.0 Beta: Initial (unreleased)
 
 %% Open the variables
 % For the path information
@@ -92,9 +104,32 @@ if strcmp(paramslc.mode,'S1_IW') == 1 | strcmp(paramslc.mode,'S1_SM')
             cmd1 = ['curl https://api.daac.asf.alaska.edu/services/search/param?platform=',key_sat,'\&beamMode=',key_mode,'\&bbox=',box,'\&start=',date1str,'\&end=',date2str,'\&relativeOrbit=',paramslc.track,'\&flightDirection=',Porb,'\&processingLevel=SLC\&maxResults=10000\&output=csv >> tmp_list_SLC.csv'];
             system(cmd1);
     end
-
+    
     % Read the SLC table
-    M = readtable('tmp_list_SLC.csv');
+    try 
+        M = readtable('tmp_list_SLC.csv');
+        tmp = M.StartTime;
+    catch % Fix regarding the issue from the ASF API 
+        newheader = '"Granule Name","Platform","Sensor","Beam Mode","Beam Mode Description","Orbit","Path Number","Frame Number","Acquisition Date","Processing Date","Processing Level","Start Time","End Time","Center Lat","Center Lon","Near Start Lat","Near Start Lon","Far Start Lat","Far Start Lon","Near End Lat","Near End Lon","Far End Lat","Far End Lon","Faraday Rotation","Ascending or Descending?","URL","Size (MB)","Off Nadir Angle","Stack Size","Doppler","GroupID","Pointing Angle"'; 
+        newheader = strrep(newheader,'"','\"');
+        system(['sed -i.orig "1 s/.*/',newheader,'/" tmp_list_SLC.csv']);
+        delete tmp_list_SLC.csv.orig;
+        M = readtable('tmp_list_SLC.csv','Delimiter',',');
+    end 
+    
+    %%%%%%%%%%%%%%%%%%
+    % Fix regarding the issue from the ASF API (to remove the UTC zone in the dates)
+    M = readtable(['tmp_list_SLC.csv'],'DatetimeType','text','Delimiter',',');
+    a = cellfun(@(rep) strrep(M.AcquisitionDate,'Z',rep), {''}, 'UniformOutput', false);
+    b = cellfun(@(rep) strrep(M.ProcessingDate,'Z',rep), {''}, 'UniformOutput', false);
+    c = cellfun(@(rep) strrep(M.StartTime,'Z',rep), {''}, 'UniformOutput', false);
+    d = cellfun(@(rep) strrep(M.EndTime,'Z',rep), {''}, 'UniformOutput', false);
+    M.AcquisitionDate = datetime(a{1,1},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSS','Format','yyyy-MM-dd''T''HH:mm:ss.SSS');
+    M.ProcessingDate = datetime(b{1,1},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSS','Format','yyyy-MM-dd''T''HH:mm:ss.SSS');
+    M.StartTime = datetime(c{1,1},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSS','Format','yyyy-MM-dd''T''HH:mm:ss.SSS');
+    M.EndTime = datetime(d{1,1},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSS','Format','yyyy-MM-dd''T''HH:mm:ss.SSS');
+    %%%%%%%%%%%%%%%%%%
+    
     listStart = M.StartTime;
     for i1 = 1 : length(listStart)
         di1(i1) = listStart(i1);
@@ -102,7 +137,7 @@ if strcmp(paramslc.mode,'S1_IW') == 1 | strcmp(paramslc.mode,'S1_SM')
     [D,idx]=sort(di1);
     listStart = M.StartTime(idx);
     listEnd = M.EndTime(idx);
-    M = readtable('tmp_list_SLC.csv',"TextType","string",'DatetimeType',"Text");
+    M = readtable('tmp_list_SLC.csv',"TextType","string",'DatetimeType',"Text",'Delimiter',',');
     listnName = M.GranuleName(idx);
     listOrbit = M.Orbit(idx);
     listPath = M.PathNumber(idx);
@@ -123,11 +158,13 @@ if strcmp(paramslc.mode,'S1_IW') == 1 | strcmp(paramslc.mode,'S1_SM')
     fclose(fres);
 
     % Finalisation and information
-    system('rm tmp_list_SLC.csv');
+    delete tmp_list_SLC.csv;
 
     %% For the PAZ and TSX data
 elseif strcmp(paramslc.mode,'PAZ_SM') == 1 | strcmp(paramslc.mode,'PAZ_SPT') == 1 | strcmp(paramslc.mode,'TSX_SM') == 1 | strcmp(paramslc.mode,'TSX_SPT') == 1
 
+    test_dual = 0;
+    
     if strcmp(paramslc.mode,'PAZ_SM') == 1 | strcmp(paramslc.mode,'PAZ_SPT') == 1
         key_name = 'PAZ1';
     else
@@ -140,7 +177,7 @@ elseif strcmp(paramslc.mode,'PAZ_SM') == 1 | strcmp(paramslc.mode,'PAZ_SPT') == 
     h = 1;
     for i1 = 1 : length(list_dir)
         % Read the .xml
-        path_xml = dir([paramslc.pathSLC,'/',list_dir(i1).name,'/',key_name,'*.xml']);
+        path_xml = dir([paramslc.pathSLC,'/',list_dir(i1).name,'/',key_name,'*.xml']); 
         path_xml = [paramslc.pathSLC,'/',list_dir(i1).name,'/',path_xml(1).name];
 
         data_xml = xml2struct(path_xml);
@@ -157,6 +194,10 @@ elseif strcmp(paramslc.mode,'PAZ_SM') == 1 | strcmp(paramslc.mode,'PAZ_SPT') == 
         if strcmp(data_xml.level1Product.productInfo.acquisitionInfo.polarisationMode.Text,'SINGLE') == 1
             tmp(i1).pol1 = data_xml.level1Product.productInfo.acquisitionInfo.polarisationList.polLayer.Text;
             tmp(i1).pol2 = 'None';
+        elseif strcmp(data_xml.level1Product.productInfo.acquisitionInfo.polarisationMode.Text,'DUAL') == 1
+            tmp(i1).pol1 = data_xml.level1Product.productInfo.acquisitionInfo.polarisationList.polLayer{1}.Text;
+            tmp(i1).pol2 = data_xml.level1Product.productInfo.acquisitionInfo.polarisationList.polLayer{2}.Text;
+            test_dual = 1; 
         end
 
         update_progressbar_MIESAR(i1./length(list_dir),findobj(gcf,'Tag','progressbar'),miesar_para,'defaut'); drawnow; pause(0.00001);
@@ -174,9 +215,14 @@ elseif strcmp(paramslc.mode,'PAZ_SM') == 1 | strcmp(paramslc.mode,'PAZ_SPT') == 
     % Save
     fres = fopen([miesar_para.WK,'/SLC.list'],'w');
     for i1 = 1 : size(date_tmp,1)
-        fprintf(fres,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n',tmp(idx(i1)).name,tmp(idx(i1)).d1,tmp(idx(i1)).d2,tmp(idx(i1)).relorbit,tmp(idx(i1)).absorbit,tmp(idx(i1)).pol1,tmp(idx(i1)).pol1,'Stored');
+        fprintf(fres,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n',tmp(idx(i1)).name,tmp(idx(i1)).d1,tmp(idx(i1)).d2,tmp(idx(i1)).relorbit,tmp(idx(i1)).absorbit,tmp(idx(i1)).pol1,tmp(idx(i1)).pol2,'Stored');
     end
     fclose(fres);
+
+    % Management of the DUAL-pol. images
+    if test_dual == 1
+        managePOLTSXPAZ([],[],'init',miesar_para); 
+    end 
 
     %% For the PAZ and TSX data
 elseif strcmp(paramslc.mode,'CSK_SM') == 1 | strcmp(paramslc.mode,'CSK_SPT') == 1

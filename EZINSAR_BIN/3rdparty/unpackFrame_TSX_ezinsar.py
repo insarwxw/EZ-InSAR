@@ -29,8 +29,8 @@ def unpack(hdf5, slcname):
     Unpack HDF5 to binary SLC file.
     '''
 
-    print(os.path.join(hdf5,'PAZ1*.xml'))
-    fname = glob.glob(os.path.join(hdf5,'PAZ1*.xml'))[0]
+    print(os.path.join(hdf5,'TSX1*.xml'))
+    fname = glob.glob(os.path.join(hdf5,'TSX1*.xml'))[0]
     if not os.path.isdir(slcname):
         os.mkdir(slcname)
 
